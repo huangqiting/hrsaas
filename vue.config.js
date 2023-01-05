@@ -31,15 +31,19 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    open: {
-      // 设置自动打开
-      app: {
-        name: "chrome", // 默认谷歌浏览器打开
-      },
-    },
+    open: true,
     overlay: {
       warnings: false,
       errors: true,
+    },
+    // 配置反向代理
+    proxy: {
+      "/api": {
+        target: "http://ihrm.itheima.net", // 跨域请求地址 不用写api
+        changOrigin: true, //  是否跨域
+        // 路径重写
+        // pathRewrite: {},
+      },
     },
     // before: require("./mock/mock-server.js"),
   },

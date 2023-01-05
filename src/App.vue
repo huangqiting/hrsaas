@@ -11,8 +11,6 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    aa() {},
-  },
+  methods: {},
 };
 </script>

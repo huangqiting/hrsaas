@@ -1,24 +1,13 @@
-import request from '@/utils/request'
-
+import request from "@/utils/request";
+// 登录接口
 export function login(data) {
   return request({
-    url: '/vue-admin-template/user/login',
-    method: 'post',
-    data
-  })
+    method: "POST",
+    url: "/sys/login", // 设置跨域了，不用加api
+    data,
+  });
 }
 
-export function getInfo(token) {
-  return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
-  })
-}
+export function getInfo() {}
 
-export function logout() {
-  return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
-  })
-}
+export function logout() {}

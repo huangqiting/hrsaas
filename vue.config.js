@@ -42,7 +42,9 @@ module.exports = {
         target: "http://ihrm.itheima.net", // 跨域请求地址 不用写api
         changOrigin: true, //  是否跨域
         // 路径重写
-        // pathRewrite: {},
+        // pathRewrite: {
+        //   "^/api": "",
+        // },
       },
     },
     // before: require("./mock/mock-server.js"),

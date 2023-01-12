@@ -10,9 +10,13 @@
       <span class="breadBtn">体验版</span>
     </div>
     <!-- <breadcrumb class="breadcrumb-container" /> -->
-
+    <!-- @command 下拉菜单的事件 点击菜单项触发的事件回调 详细使用看官方文档 -->
     <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
+      <el-dropdown
+        class="avatar-container"
+        trigger="click"
+        @command="handleCommand"
+      >
         <div class="avatar-wrapper">
           <img v-imagerror="defaultIMG" :src="staffPhoto" class="user-avatar" />
           <span class="name">{{ userName }}</span>
@@ -28,7 +32,7 @@
           >
             <el-dropdown-item>项目地址</el-dropdown-item>
           </a>
-          <el-dropdown-item divided @click.native="logout">
+          <el-dropdown-item divided command="logout">
             <span style="display: block">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -58,9 +62,11 @@ export default {
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
-    async logout() {
-      await this.$store.dispatch("user/logout"); // 不管写不写await 都是同步的
-      this.$router.push(`/login`);
+    async handleCommand(command) {
+      if (command === "logout") {
+        await this.$store.dispatch("user/logout"); // 不管写不写await 都是同步的
+        this.$router.push(`/login`);
+      }
     },
   },
 };

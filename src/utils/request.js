@@ -19,14 +19,14 @@ service.interceptors.request.use(
     // 判断有无token
     if (store.getters.token) {
       // token过期的主动介入处理
-      if (IsCheckTimeOut()) {
-        // token过期 跳到登录页 做退出登录操作
-        // 必须先删token 再跳转页面 否则会=还是会token过期
-        store.dispatch("user/logout");
-        router.push("/login");
-        // 把错误信息返回出去
-        return Promise.reject(new Error("token已过期"));
-      }
+      // if (IsCheckTimeOut()) {
+      //   // token过期 跳到登录页 做退出登录操作
+      //   // 必须先删token 再跳转页面 否则会还是会token过期
+      //   store.dispatch("user/logout");
+      //   router.push("/login");
+      //   // 把错误信息返回出去
+      //   return Promise.reject(new Error("token已过期"));
+      // }
       // 设置token请求头
       config.headers.Authorization = `Bearer ${store.getters.token}`;
     }
@@ -52,19 +52,17 @@ service.interceptors.response.use(
     }
   },
   // 失败回调
-  (err) => {
+  (error) => {
     // token过期的被动介入处理
-    if (
-      error.response &&
-      error.response.data &&
-      error.response.data.code === 10002
-    ) {
+    // if (error.response && error.response.data &&error.response.data.code === 10002 )
+    // ? 链运算符 也叫对象的可选链 等同于上面的写法
+    if (error.response?.data?.code === 10002) {
       store.dispatch("user/logout");
       router.push("/login");
     } else {
-      Message.error(err.message);
+      Message.error(error.message);
     }
-    return Promise.reject(err); // 返回错误的promise 进catch
+    return Promise.reject(error); // 返回错误的promise 进catch
   }
 );
 export default service;

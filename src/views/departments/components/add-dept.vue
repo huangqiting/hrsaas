@@ -1,6 +1,11 @@
 <template>
   <!-- @close关闭弹层执行里面回调 -->
-  <el-dialog :title="showTitle" :visible="showDialog" @close="btnCancel">
+  <el-dialog
+    :close-on-click-modal="false"
+    :title="showTitle"
+    :visible="showDialog"
+    @close="btnCancel"
+  >
     <!-- 匿名插槽 -->
     <!-- label-width就是label的宽度 -->
     <el-form
@@ -219,8 +224,8 @@ export default {
         // 通知父组件跟新视图
         this.$emit("addDepts");
         // 提示用户添加成功
-      } catch {
-        this.$message.error("添加失败");
+      } catch (err) {
+        console.log(err);
       }
     },
     // 关闭弹层 清除表单

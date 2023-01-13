@@ -2,7 +2,7 @@
   <div class="departments-container">
     <div class="app-container">
       <!-- 卡片组件 -->
-      <el-card class="tree-card">
+      <el-card v-loading="loading" class="tree-card">
         <!-- 调用组件 -->
         <TreeTools :treeNode="company" :isRoot="true" @addDepts="onAddDepts" />
         <!-- 这个props和父传子没有关系 -->
@@ -54,6 +54,8 @@ export default {
       isShowDialog: false,
       // 保存点击的部门信息
       node: null,
+      // 用来控制
+      loading: false,
     };
   },
   components: {
@@ -66,13 +68,16 @@ export default {
   methods: {
     // 获取部门列表
     async getDepartments() {
+      // 开启转圈圈
+      this.loading = true;
       const result = await getDepartmentsAPI();
       // 为了添加部门的重复校验 id: "" 手动赋值一个空id 变成树形结构的根节点
       this.company = { name: result.companyName, manager: "负责人", id: "" };
       // 需要转换成树形结构
       // this.departs = result.depts;
       this.departs = tranListToTreeData(result.depts, "");
-      console.log(result);
+      // 关闭转圈圈
+      this.loading = false;
     },
     // 添加部门
     onAddDepts(node) {
@@ -82,13 +87,15 @@ export default {
       this.node = node;
     },
     // 编辑部门
-    onEditDepts(node) {
-      // 显示弹层
-      this.isShowDialog = true;
+    async onEditDepts(node) {
       // 保存部门信息
       this.node = node;
-      // 在这里调用获取部门详情的方法
-      this.$refs.AddDeptRef.getDepartDetail(node.id);
+      // // 在这里调用获取部门详情的方法
+      // await this.$refs.AddDeptRef.getDepartDetail(node.id);
+      // 由于node是同一个地址 如果修改formDate 会影响到node 这里可以用一个简单的浅拷贝
+      this.$refs.AddDeptRef.formDate = { ...node };
+      // 显示弹层
+      this.isShowDialog = true;
     },
   },
 };

@@ -39,8 +39,8 @@ module.exports = {
     // 配置反向代理
     proxy: {
       "/api": {
-        // target: "http://ihrm.itheima.net", // 跨域请求地址 不用写api
-        target: "http://ihrm-java.itheima.net/", // 跨域请求地址 不用写api
+        target: "http://ihrm.itheima.net", // 跨域请求地址 不用写api
+        // target: "http://ihrm-java.itheima.net/", // 跨域请求地址 不用写api
         changOrigin: true, //  是否跨域
         // 路径重写
         // pathRewrite: {

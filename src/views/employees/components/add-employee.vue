@@ -201,7 +201,7 @@ export default {
         await this.$refs.form.validate();
         await addEmployeeAPI(this.formDate);
         // this.$parent是一级父组件实例 调用重新获取员工列表的方法
-        this.$parent.getEmployeeList();
+        this.$parent?.getEmployeeList();
         // 关闭弹层
         this.$parent.showDialog = false;
       } catch (err) {

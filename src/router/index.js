@@ -63,7 +63,18 @@ export const constantRoutes = [
     component: () => import("@/views/404"),
     hidden: true,
   },
-
+  {
+    name: "import",
+    path: "/import",
+    component: Layout,
+    hidden: true, // 隐藏在左侧菜单中
+    children: [
+      {
+        path: "", // 二级路由什么都不写，默认父级路由
+        component: () => import("@/views/import"),
+      },
+    ],
+  },
   {
     path: "/",
     component: Layout,

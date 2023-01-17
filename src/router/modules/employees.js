@@ -18,6 +18,17 @@ export default {
         title: "员工管理", // meta属性的里面的属性 随意定义 但是这里为什么要用title呢， 因为左侧导航会读取我们的路由里的meta里面的title作为显示菜单名称
       },
     },
+    // 员工详情路由
+    {
+      path: "detail/:id", // params传参 动态路由传参
+      name: "detail",
+      component: () => import("@/views/employees/views/detail.vue"),
+      hidden: true, // 不在左侧菜单显示
+      // 路由元信息
+      meta: {
+        title: "员工详情", // 标记当前路由规则的中文名称，后续在做左侧菜单时使用
+      },
+    },
   ],
 };
 

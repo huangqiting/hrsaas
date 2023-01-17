@@ -1,14 +1,32 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">首页: {{ userName }}</div>
-    <PageTools :showBefore="true">
-      <template #before>
-        <span>哈哈哈</span>
-      </template>
-      <template #after>
-        <el-button type="primary" size="default">确定</el-button>
-      </template>
-    </PageTools>
+  <div class="upload-excel">
+    <div class="btn-upload">
+      <el-button
+        :loading="loading"
+        size="mini"
+        type="primary"
+        @click="handleUpload"
+      >
+        点击上传
+      </el-button>
+    </div>
+
+    <input
+      ref="excel-upload-input"
+      class="excel-upload-input"
+      type="file"
+      accept=".xlsx, .xls"
+      @change="handleClick"
+    />
+    <div
+      class="drop"
+      @drop="handleDrop"
+      @dragover="handleDragover"
+      @dragenter="handleDragover"
+    >
+      <i class="el-icon-upload" />
+      <span>将文件拖到此处</span>
+    </div>
   </div>
 </template>
 
@@ -22,14 +40,30 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
+<style scoped lang="scss">
+.upload-excel {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+  .excel-upload-input {
+    display: none;
+    z-index: -9999;
   }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
+  .btn-upload,
+  .drop {
+    border: 1px dashed #bbb;
+    width: 350px;
+    height: 160px;
+    text-align: center;
+    line-height: 160px;
+  }
+  .drop {
+    line-height: 80px;
+    color: #bbb;
+    i {
+      font-size: 60px;
+      display: block;
+    }
   }
 }
 </style>

@@ -58,6 +58,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
+            <ImageUpload ref="staffPhoto" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -91,6 +92,7 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <ImageUpload ref="myStaffPhoto" />
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -393,6 +395,7 @@ import {
   updatePersonalAPI,
   saveUserDetailByIdAPI,
 } from "@/api/employees";
+import ImageUpload from "@/components/ImageUpload";
 export default {
   name: "UserInfo",
   data() {
@@ -473,21 +476,60 @@ export default {
     // 获取员工基本信息
     async getUserDetailById() {
       this.userInfo = await getUserDetailByIdAPI(this.userId);
+      // 通过ref可以拿到头像组件实例
+      // 如果用户里有头像 且去掉左右空格不为空 则把这个头像地址赋值头像实例
+      if (this.userInfo.staffPhoto && this.userInfo.staffPhoto.trim()) {
+        this.$refs.staffPhoto.fileList = [
+          // upload 为true 表示这张图片已经上传完毕
+          { url: this.userInfo.staffPhoto, upload: true },
+        ];
+      }
     },
     // 修改员工基本信息
     async saveUser() {
-      await saveUserDetailByIdAPI(this.userInfo);
+      const fileList = this.$refs.staffPhoto.fileList;
+      // 图片上传成功后upload为true 所以图片在上传中 则终止修改
+      if (fileList.some((item) => !item.upload)) {
+        this.$message.warning("图片上传中！");
+        return;
+      }
+      // 判断fileList有没有长度 没有长度就给地址一个空字符串
+      await saveUserDetailByIdAPI({
+        ...this.userInfo,
+        staffPhoto: fileList.length ? fileList[0].url : "",
+      });
       this.$message.success("更新成功");
     },
     // 获取用户详情
     async getPersonalDetail() {
-      await getPersonalDetailAPI(this.userId);
+      this.formData = await getPersonalDetailAPI(this.userId);
+      if (this.formData.staffPhoto && this.formData.staffPhoto.trim()) {
+        this.$refs.myStaffPhoto.fileList = [
+          // upload 为true 表示这张图片已经上传完毕
+          { url: this.formData.staffPhoto, upload: true },
+        ];
+      }
     },
     // 修改用户详情
     async savePersonal() {
-      await updatePersonalAPI(this.formData);
+      const fileList = this.$refs.myStaffPhoto.fileList;
+      // 换了一种方式保存图片地址
+      if (fileList.some((item) => !item.upload)) {
+        this.$message.warning("图片上传中！");
+        return;
+      }
+      if (fileList.length) {
+        this.formData.staffPhoto = fileList[0].url;
+      } else {
+        this.formData.staffPhoto = "";
+      }
+      // 由于formData里的userId为空 所以要重新赋值并覆盖空的userId
+      await updatePersonalAPI({ ...this.formData, userId: this.userId });
       this.$message.success("更新成功");
     },
+  },
+  components: {
+    ImageUpload,
   },
 };
 </script>

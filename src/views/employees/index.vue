@@ -24,29 +24,77 @@
       <!-- 表格和分页 -->
       <el-table v-loading="loading" :data="list" border>
         el-table border>
-        <el-table-column label="序号" sortable="" type="index" />
-        <el-table-column label="姓名" sortable="" prop="username" />
-        <el-table-column label="工号" sortable="" prop="workNumber" />
+        <el-table-column label="序号" align="center" sortable="" type="index" />
         <el-table-column
+          label="姓名"
+          align="center"
+          sortable=""
+          prop="username"
+        />
+        <el-table-column label="头像" align="center" width="120px">
+          <template v-slot="{ row }">
+            <img
+              @click="showQrCode(row.staffPhoto)"
+              :src="row.staffPhoto"
+              v-imagerror="require('@/assets/common/bigUserHeader.png')"
+              alt=""
+              style="
+                border-radius: 50%;
+                width: 100px;
+                height: 100px;
+                padding: 10px;
+              "
+            />
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="工号"
+          sortable=""
+          align="center"
+          prop="workNumber"
+        />
+        <el-table-column
+          align="center"
           :formatter="formatEmployment"
           label="聘用形式"
           sortable=""
           prop="formOfEmployment"
         />
-        <el-table-column label="部门" sortable="" prop="departmentName" />
-        <el-table-column label="入职时间" sortable="" prop="timeOfEntry">
+        <el-table-column
+          align="center"
+          label="部门"
+          sortable=""
+          prop="departmentName"
+        />
+        <el-table-column
+          align="center"
+          label="入职时间"
+          sortable=""
+          prop="timeOfEntry"
+        >
           <template v-slot="{ row }">
             <!-- 作用域插槽获取当前行的数据 用全局过滤器对时间进行处理 -->
             {{ row.timeOfEntry | formatDate }}
           </template>
         </el-table-column>
-        <el-table-column label="账户状态" sortable="" prop="enableState">
+        <el-table-column
+          align="center"
+          label="账户状态"
+          sortable=""
+          prop="enableState"
+        >
           <template v-slot="{ row }">
             <!-- 根据状态来决定是否开关 -->
             <el-switch :value="row.enableState === 1"> </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" sortable="" fixed="right" width="280">
+        <el-table-column
+          align="center"
+          label="操作"
+          sortable=""
+          fixed="right"
+          width="280"
+        >
           <template v-slot="{ row }">
             <el-button
               type="text"
@@ -77,6 +125,12 @@
     </div>
     <!-- 放置添加员工弹层 -->
     <AddEmployee :showDialog.sync="showDialog" />
+    <!-- 头像二维码弹层 -->
+    <el-dialog title="头像二维码" :visible.sync="showCodeDialog" width="30%">
+      <el-row type="flex" justify="center">
+        <canvas ref="myCanvas"></canvas>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -85,6 +139,7 @@ import { getEmployeeListAPI, delEmployeeAPI } from "@/api/employees";
 import EmployeeEnum from "@/api/constant/employees";
 import AddEmployee from "./components/add-employee.vue";
 import { formatDate } from "@/filters";
+import QrCode from "qrcode";
 export default {
   name: "Employees",
   data() {
@@ -97,12 +152,29 @@ export default {
         total: 0, // 总条数
       },
       showDialog: false, // 控制添加员工弹层
+      showCodeDialog: false, //控制头像二维码弹层
     };
   },
   created() {
     this.getEmployeeList();
   },
   methods: {
+    // 点击头像弹出二维码
+    showQrCode(url) {
+      // 有头像的情况下才弹层
+      if (url) {
+        // 数据更新了 页面渲染是异步的所以 拿不到ref
+        this.showCodeDialog = true;
+        // nextTick可以在页面渲染完毕之后执行
+        this.$nextTick(() => {
+          // 此时可以拿到ref
+          // QrCode.toCanvas(dom, info) info是字符串
+          QrCode.toCanvas(this.$refs.myCanvas, url);
+        });
+      } else {
+        this.$message.warning("该用户还未上传头像");
+      }
+    },
     // 获取员工列表
     async getEmployeeList() {
       // 开启转圈圈

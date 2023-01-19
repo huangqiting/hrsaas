@@ -211,7 +211,11 @@
 </template>
 <script>
 import EmployeeEnum from "@/api/constant/employees";
-
+import {
+  getEmployeeSimpleAPI,
+  getJobDetailAPI,
+  updateJobAPI,
+} from "@/api/employees";
 export default {
   name: "JobInfo",
   data() {
@@ -248,6 +252,25 @@ export default {
         workingTimeForTheFirstTime: "", // 首次参加工作时间
       },
     };
+  },
+  created() {
+    this.getEmployeeSimple();
+    this.getJobDetail();
+  },
+  methods: {
+    // 获取部门负责人
+    async getEmployeeSimple() {
+      this.depts = await getEmployeeSimpleAPI();
+    },
+    // 获取员工岗位信息
+    async getJobDetail() {
+      this.formData = await getJobDetailAPI(this.userId);
+    },
+    // 修改员工岗位信息
+    async saveJob() {
+      await updateJobAPI(this.formData);
+      this.$message.success("更新成功");
+    },
   },
 };
 </script>

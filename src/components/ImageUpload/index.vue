@@ -32,8 +32,8 @@
 import COS from "cos-js-sdk-v5"; // 引入腾讯云的包
 // 实例化COS对象  只有这个才能进入自己的存储桶
 const cos = new COS({
-  SecretId: "AKIDDHn32lGXYJo1yjFBwUovmPnwqWzDUVGn", // 自己的身份识别 ID
-  SecretKey: "KQFpDJBnAnBJBnAH9l7E6lqiNq8WlsjM", //  身份密钥
+  SecretId: "xxx", // 自己的身份识别 ID
+  SecretKey: "xxx", //  身份密钥
 });
 export default {
   name: "ImageUpload",

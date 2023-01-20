@@ -32,7 +32,7 @@
 import COS from "cos-js-sdk-v5"; // 引入腾讯云的包
 // 实例化COS对象  只有这个才能进入自己的存储桶
 const cos = new COS({
-  SecretId: "xxx", // 自己的身份识别 ID
+  SecretId: "xxx", // 自己的腾讯云身份识别 ID
   SecretKey: "xxx", //  身份密钥
 });
 export default {

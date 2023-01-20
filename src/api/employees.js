@@ -83,3 +83,11 @@ export function updateJobAPI(data) {
     data,
   });
 }
+// 给员工分配角色
+export const assignRolesAPI = (data) => {
+  return request({
+    method: "PUT",
+    url: "/sys/user/assignRoles",
+    data,
+  });
+};

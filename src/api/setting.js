@@ -19,7 +19,7 @@ export const deleteRoleAPI = (id) => {
     url: `/sys/role/${id}`,
   });
 };
-// 根据id回去获取角色的详情
+// 根据id获取角色的详情
 export const getRoleDetailAPI = (id) => {
   return request({
     url: `/sys/role/${id}`,
@@ -38,6 +38,14 @@ export const addRoleAPI = (data) => {
   return request({
     method: "POST",
     url: `/sys/role`,
+    data,
+  });
+};
+// 给角色分配权限
+export const assignPermAPI = (data) => {
+  return request({
+    method: "PUT",
+    url: "/sys/role/assignPrem",
     data,
   });
 };

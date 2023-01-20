@@ -105,7 +105,7 @@
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
-            <el-button type="text" size="small" @click="showRoleDialog = true"
+            <el-button type="text" size="small" @click="editRole(row.id)"
               >角色</el-button
             >
             <el-button type="text" size="small" @click="deleteEmployee(row.id)"
@@ -134,7 +134,11 @@
       </el-row>
     </el-dialog>
     <!-- 角色分配弹层 -->
-    <AssignRole :showRoleDialog.sync="showRoleDialog" />
+    <AssignRole
+      ref="assignRole"
+      :userId="userId"
+      :showRoleDialog.sync="showRoleDialog"
+    />
   </div>
 </template>
 
@@ -159,12 +163,20 @@ export default {
       showDialog: false, // 控制添加员工弹层
       showCodeDialog: false, //控制头像二维码弹层
       showRoleDialog: false, // 控制角色分配的弹层
+      userId: null, // 当前用户的id
     };
   },
   created() {
     this.getEmployeeList();
   },
   methods: {
+    // 点击角色 把当前员工的id传到子组件 并开启弹层
+    async editRole(id) {
+      this.userId = id;
+      // 通过ref调用子组件的方法
+      await this.$refs.assignRole.getUserDetailById(this.userId);
+      this.showRoleDialog = true;
+    },
     // 点击头像弹出二维码
     showQrCode(url) {
       // 有头像的情况下才弹层

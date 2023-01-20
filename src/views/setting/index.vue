@@ -12,7 +12,12 @@
               >
             </el-row>
             <!-- 表格 :data="list" 绑定数组 -->
-            <el-table :data="list" border style="width: 100%">
+            <el-table
+              v-loading="loading"
+              :data="list"
+              border
+              style="width: 100%"
+            >
               <!-- type="index"索引从1开始 -->
               <el-table-column
                 align="center"
@@ -36,7 +41,12 @@
               </el-table-column>
               <el-table-column align="center" label="操作">
                 <template v-slot="{ row }">
-                  <el-button type="success" size="small">分配权限</el-button>
+                  <el-button
+                    type="success"
+                    size="small"
+                    @click="assignPerm(row.id)"
+                    >分配权限</el-button
+                  >
                   <el-button
                     type="primary"
                     size="small"
@@ -146,7 +156,28 @@
         </el-row>
       </el-form>
     </el-dialog>
-    <el-form></el-form>
+    <el-dialog
+      title="分配权限"
+      :visible="showPermDialog"
+      @close="btnPermCancel"
+    >
+      <el-tree
+        ref="permTree"
+        node-key="id"
+        show-checkbox
+        default-expand-all
+        check-strictly
+        :data="permData"
+        :props="defaultProps"
+        :default-checked-keys="selectCheck"
+      ></el-tree>
+      <template #footer>
+        <el-row type="flex" justify="center">
+          <el-button @click="btnPermCancel">取消</el-button>
+          <el-button type="primary" @click="btnPermSubmit">确定</el-button>
+        </el-row>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -158,7 +189,10 @@ import {
   getRoleDetailAPI,
   updateRoleAPI,
   addRoleAPI,
+  assignPermAPI,
 } from "@/api/setting";
+import { getPermissionListAPI } from "@/api/permisson";
+import { tranListToTreeData } from "@/utils";
 export default {
   name: "Setting",
   data() {
@@ -198,6 +232,17 @@ export default {
           },
         ],
       },
+      // 控制分配权限的弹层
+      showPermDialog: false,
+      // 把树形组件默认的树形label改成name
+      defaultProps: { label: "name" },
+      // 专门存放转成树形结构的权限
+      permData: [],
+      // 存放当前用户点击的角色id
+      roleId: null,
+      // 接收选中权限的节点
+      selectCheck: [],
+      loading: false,
     };
   },
   created() {
@@ -205,6 +250,35 @@ export default {
     this.getCompanyInfo();
   },
   methods: {
+    // 点击分配权限 显示弹层 获取权限列表
+    async assignPerm(id) {
+      this.loading = true;
+      this.permData = tranListToTreeData(await getPermissionListAPI(), "0");
+      // 保存当前角色id 修改的时候要用
+      this.roleId = id;
+      // 获取角色详情信息 里面有角色拥有的权限点
+      const { permIds } = await getRoleDetailAPI(id);
+      // 保存当前角色的权限点
+      this.selectCheck = permIds;
+      this.showPermDialog = true;
+      this.loading = false;
+    },
+    // 提交分配权限的修改
+    async btnPermSubmit() {
+      // tree的getCheckedKeys方法 必须tree的 show-checkbox为true
+      // node-key绑定了id 返回tree选择的id数组
+      await assignPermAPI({
+        id: this.roleId,
+        permIds: this.$refs.permTree.getCheckedKeys(),
+      });
+      this.$message.success("分配权限成功");
+      this.showPermDialog = false;
+    },
+    // 关闭分配权限弹层 并清空selectCheck 不清空则有上次的数据
+    btnPermCancel() {
+      this.selectCheck = [];
+      this.showPermDialog = false;
+    },
     // 获取角色列表
     async getRoleList() {
       // total总数 rows角色列表

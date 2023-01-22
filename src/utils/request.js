@@ -3,9 +3,9 @@ import store from "@/store";
 import { Message } from "element-ui";
 import router from "@/router";
 import { getTimeStamp } from "@/utils/auth";
-const TimeOut = 3600; // 超时时间
+// const TimeOut = 3600; // 超时时间
 // 超时逻辑 当前事件 - 缓存中的事件 是否大于token有效时间一小时
-const IsCheckTimeOut = () => (Date.now() - getTimeStamp()) / 1000 > TimeOut;
+// const IsCheckTimeOut = () => (Date.now() - getTimeStamp()) / 1000 > TimeOut;
 const service = Axios.create({
   // 当执行yarn dev => .env.development => /api => 跨域代理
   // 当执行yarn build => .env.production => /prod-api
@@ -57,6 +57,7 @@ service.interceptors.response.use(
     // if (error.response && error.response.data &&error.response.data.code === 10002 )
     // ? 链运算符 也叫对象的可选链 等同于上面的写法
     if (error.response?.data?.code === 10002) {
+      Message.error("登录过期，请重新登录！");
       store.dispatch("user/logout");
       router.push("/login");
     } else {

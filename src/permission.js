@@ -19,9 +19,27 @@ router.beforeEach(async (to, from, next) => {
       if (!store.getters.userName) {
         // 由于获取用户信息是异步的 会导致没获取到信息就直接放行
         // 所以要等获取完用户信息 再放行
-        await store.dispatch("user/getUserInfoAPI");
+        // 获取登录用户的权限
+        const {
+          roles: { menus },
+        } = await store.dispatch("user/getUserInfoAPI");
+        // 获取用户所拥有的权限路由 actions是异步的 所以这里要等待
+        const routes = await store.dispatch("permission/filterRoutes", menus);
+        // addRoutes动态添加路由 必须用 next(地址) 不能用next()
+        // router.addRoutes([
+        //   ...routes,
+        //   { path: "*", redirect: "/404", hidden: true },
+        // ]);
+        // 相当于跳到对应的地址 相当于多做一次跳转
+        // 进门了，但是进门之后我要去的地方的路还没有铺好，直接走，掉坑里，
+        // 多做一次跳转，再从门外往里进一次，跳转之前 把路铺好，再次进来的时候，路就铺好了
+        // 高版本的router3版本才有addRoute这个方法
+        routes.forEach((item) => router.addRoute(item));
+        router.addRoute({ path: "*", redirect: "/404", hidden: true });
+        next(to.path);
+      } else {
+        next();
       }
-      next();
     }
     // 没token的情况下
   } else {

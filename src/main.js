@@ -11,7 +11,7 @@ import "@/styles/index.scss"; // global css
 import App from "./App";
 import store from "./store";
 import router from "./router";
-
+import checkPermission from "@/mixin/checkPermission";
 import "@/icons"; // icon
 import "@/permission"; // permission control
 // 把导出的全放directives对象里面
@@ -46,6 +46,8 @@ Vue.use(ElementUI, { locale });
 // Vue.use(ElementUI)
 // 全局注册组件
 Vue.use(Component);
+// 注册一个全局的权限按钮混入
+Vue.mixin(checkPermission);
 Vue.config.productionTip = false;
 
 new Vue({

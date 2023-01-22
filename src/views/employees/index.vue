@@ -16,7 +16,11 @@
           <el-button type="danger" size="small" @click="exportData"
             >Excel导出</el-button
           >
-          <el-button type="primary" size="small" @click="showDialog = true"
+          <el-button
+            type="primary"
+            size="small"
+            @click="showDialog = true"
+            :disabled="!checkPermission('POINT-USER-ADD')"
             >新增员工</el-button
           >
         </template>

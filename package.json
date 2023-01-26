@@ -18,7 +18,7 @@
     "core-js": "^3.27.1",
     "cos-js-sdk-v5": "^1.4.15",
     "echarts": "^5.4.1",
-    "element-ui": "2.13.2",
+    "element-ui": "^2.15.12",
     "file-saver": "^2.0.5",
     "js-cookie": "2.2.0",
     "normalize.css": "7.0.0",

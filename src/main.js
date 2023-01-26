@@ -6,7 +6,6 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import Component from "@/components";
 import "@/styles/index.scss"; // global css
-
 import App from "./App";
 import store from "./store";
 import router from "./router";

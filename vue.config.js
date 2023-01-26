@@ -24,8 +24,8 @@ if (isProd) {
     // value 是实际引入的包的全局变量名
     // 排除element-ui 所以后面要引入CDN文件 CDN文件有排除element的全局变量名
     // externals首先排除定义的包名 空出来的位置 会用变量名替换
-    "element-ui": "ELEMENT",
     vue: "Vue",
+    "element-ui": "ELEMENT",
     xlsx: "XLSX",
   };
   cdn = {
@@ -36,11 +36,11 @@ if (isProd) {
     ],
     js: [
       // vue must at first!
-      "https://unpkg.com/vue/dist/vue.js", // vuejs
+      " https://unpkg.com/vue@2.6.10/dist/vue.min.js", // vuejs 必须要指定vue2的
       // element-ui js
       "https://unpkg.com/element-ui/lib/index.js", // elementUI
-      "https://cdn.jsdelivr.net/npm/xlsx@0.16.6/dist/jszip.min.js",
-      "https://cdn.jsdelivr.net/npm/xlsx@0.16.6/dist/xlsx.full.min.js",
+      "https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/jszip.min.js",
+      "https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js",
     ],
   };
 }

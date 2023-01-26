@@ -223,10 +223,7 @@ export default {
     // 根据id删除员工
     async deleteEmployee(id) {
       try {
-        await this.$confirm("您确定要删除该员工吗", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-        });
+        await this.$confirm("您确定要删除该员工吗");
         await delEmployeeAPI(id);
         this.$message.success("删除成功");
         // 删除后重新获取员工列表

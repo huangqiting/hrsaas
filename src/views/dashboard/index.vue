@@ -33,6 +33,7 @@
             <span>工作日历</span>
           </div>
           <!-- 放置日历组件 -->
+          <WorkCalendar />
         </el-card>
         <!-- 公告 -->
         <el-card class="box-card">
@@ -88,10 +89,16 @@
             <span>流程申请</span>
           </div>
           <div class="sideNav">
-            <el-button class="sideBtn">加班离职</el-button>
+            <el-button class="sideBtn" @click="showDialog = true"
+              >加班离职</el-button
+            >
             <el-button class="sideBtn">请假调休</el-button>
-            <el-button class="sideBtn">审批列表</el-button>
-            <el-button class="sideBtn">我的信息</el-button>
+            <el-button class="sideBtn" @click="$router.push('/users/approvals')"
+              >审批列表</el-button
+            >
+            <el-button class="sideBtn" @click="$router.push('/users/info')"
+              >我的信息</el-button
+            >
           </div>
         </el-card>
 
@@ -101,6 +108,7 @@
             <span>绩效指数</span>
           </div>
           <!-- 放置雷达图 -->
+          <Radar />
         </el-card>
         <!-- 帮助连接 -->
         <el-card class="box-card">
@@ -132,18 +140,112 @@
         </el-card>
       </el-col>
     </el-row>
+    <!-- 离职弹出层 -->
+    <el-dialog
+      title="离职申请"
+      :visible.sync="showDialog"
+      width="40%"
+      :close-on-click-modal="false"
+      @close="btnCancel"
+    >
+      <el-form :model="quitForm" ref="form" :rules="rules" label-width="120px">
+        <el-form-item label="离职时间" prop="exceptTime">
+          <el-date-picker
+            value-format="yyyy-MM-dd HH:mm:ss"
+            type="datetime"
+            v-model="quitForm.exceptTime"
+            placeholder="选择离职时间"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="离职原因" prop="reason">
+          <el-input
+            type="textarea"
+            placeholder="请输入内容"
+            v-model="quitForm.reason"
+            :autosize="{ minRows: 3, maxRows: 8 }"
+            style="width: 70%"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <el-row type="flex" justify="center">
+          <el-button @click="btnCancel">取消</el-button>
+          <el-button type="primary" @click="btnSubmit">确定</el-button>
+        </el-row>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 //  createNamespacedHelpers  创建基于某个命名空间辅助函数
 import { mapGetters, createNamespacedHelpers } from "vuex";
+import WorkCalendar from "./components/work-calendar.vue";
+import Radar from "./components/radar.vue";
+import { startProcess } from "@/api/approvals";
 const { mapState } = createNamespacedHelpers("user");
 export default {
   name: "Dashboard",
+  data() {
+    return {
+      showDialog: false, // 控制离职弹层显示
+      // 表单数据
+      quitForm: {
+        exceptTime: "", // 离职时间
+        reason: "", // 离职原因
+        processKey: "process_dimission", // 特定的审批
+        processName: "离职",
+      },
+      // 表单校验
+      rules: {
+        exceptTime: [
+          {
+            required: true,
+            message: "离职时间不能为空",
+            trigger: "blur",
+          },
+        ],
+        reason: [
+          {
+            required: true,
+            message: "离职原因不能为空",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
+  },
+  methods: {
+    // 提交离职流程申请
+    async btnSubmit() {
+      // this.$refs.form.validate(isOK => {});
+      // 不写回调返回promise
+      await this.$refs.form.validate();
+      // 提交需要用户的id
+      await startProcess({ ...this.quitForm, userId: this.userInfo.userId });
+      this.showDialog = false;
+      this.$message.success("提交成功");
+    },
+    // 取消关闭弹层
+    btnCancel() {
+      this.quitForm = {
+        exceptTime: "",
+        reason: "",
+        processKey: "process_dimission",
+        processName: "离职",
+      };
+      this.$refs.form.resetFields();
+      this.showDialog = false;
+    },
+  },
   computed: {
     ...mapGetters(["userName", "staffPhoto"]),
     ...mapState(["userInfo"]),
+  },
+  components: {
+    WorkCalendar,
+    Radar,
   },
 };
 </script>

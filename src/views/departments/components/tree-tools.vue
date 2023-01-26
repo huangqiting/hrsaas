@@ -73,10 +73,7 @@ export default {
         //     this.$emit("delDepts");
         //     this.$message.success("删除成功");
         //   });
-        await this.$confirm("您确定要删除该部门吗", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-        }); //弹出是否删除提示框 返回是一个promise
+        await this.$confirm("您确定要删除该部门吗"); //弹出是否删除提示框 返回是一个promise
         await delDepartmentsAPI(this.treeNode.id); // 调用接口删除部门
         this.$emit("delDepts"); // 子传父通知父组件 重新获取部门列表
         this.$message.success("删除成功"); // 删除成功后提示用户

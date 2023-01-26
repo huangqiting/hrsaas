@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <hamburger
+    <Hamburger
       :is-active="sidebar.opened"
       class="hamburger-container"
       @toggleClick="toggleSideBar"
@@ -10,8 +10,15 @@
       <span class="breadBtn">体验版</span>
     </div>
     <!-- <breadcrumb class="breadcrumb-container" /> -->
+
     <!-- @command 下拉菜单的事件 点击菜单项触发的事件回调 详细使用看官方文档 -->
     <div class="right-menu">
+      <!-- 点击全屏 -->
+      <ScreenFull class="right-menu-item" />
+      <!-- 放置全屏插件 -->
+      <ThemePicker class="right-menu-item" />
+      <!-- 切换语言 -->
+      <lang class="right-menu-item" />
       <el-dropdown
         class="avatar-container"
         trigger="click"
@@ -44,11 +51,8 @@
 <script>
 import { mapGetters } from "vuex";
 import Hamburger from "@/components/Hamburger";
-
+import ScreenFull from "@/components/ScreenFull";
 export default {
-  components: {
-    Hamburger,
-  },
   data() {
     return {
       // 引入默认头像 不能写死
@@ -68,6 +72,10 @@ export default {
         this.$router.push(`/login`);
       }
     },
+  },
+  components: {
+    ScreenFull,
+    Hamburger,
   },
 };
 </script>
@@ -129,7 +137,7 @@ export default {
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      vertical-align: middle;
 
       &.hover-effect {
         cursor: pointer;

@@ -144,10 +144,7 @@ export default {
       // 提醒用户是否删除 防止误删
       // 默认会返回一个Promise对象
       try {
-        await this.$confirm("您确定要删除吗", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-        });
+        await this.$confirm("您确定要删除吗");
         await delPermissionAPI(id);
         this.$message.success("删除成功");
         // 重新获取权限列表

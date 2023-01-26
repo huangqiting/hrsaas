@@ -299,10 +299,7 @@ export default {
     // 根据角色id删除角色
     async deleteRole(id) {
       // 返回一个promise 确定进成功 取消进失败
-      await this.$confirm("您确定要删除该角色吗", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-      });
+      await this.$confirm("您确定要删除该角色吗");
       // 调用删除接口
       await deleteRoleAPI(id);
       // 提示用户

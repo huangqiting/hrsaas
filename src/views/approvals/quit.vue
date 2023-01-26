@@ -3,7 +3,7 @@
     <div class="contLeft">
       <h2>{{ information.user_name }}申请离职</h2>
       <div class="topTit">
-        <img src="@/assets/common/img.jpeg" alt>
+        <img src="@/assets/common/img.jpeg" alt />
         <div class="info">
           <p class="name">
             <strong>{{ information.username }}</strong>
@@ -18,12 +18,10 @@
       </div>
       <div class="content">
         <!-- <p v-for="(item, index) in information.body" :key="index"><span>{{item.key}} </span> {{item.val}}</p> -->
-        <p>
-          <span>申请类型：</span>离职
-        </p>
+        <p><span>申请类型：</span>离职</p>
         <p>
           <span>期望离职时间：</span>
-          {{ information.data.exceptTime | formatDate }}
+          {{ information.data.exceptTime }}
         </p>
         <p>
           <span>离职原因：</span>
@@ -57,40 +55,48 @@
 </template>
 
 <script>
-import { getApprovalsDetail, getApprovalsTaskDetail, downImg } from '@/api/approvals'
+import {
+  getApprovalsDetail,
+  getApprovalsTaskDetail,
+  downImg,
+} from "@/api/approvals";
 export default {
-  name: 'UsersTableIndex',
+  name: "UsersTableIndex",
 
   data() {
     return {
       approvalId: this.$route.params.id,
       information: {
-        data: {}
+        data: {},
       },
       taskInstanceOutList: [],
-      imgs: ''
-    }
+      imgs: "",
+    };
   },
   created() {
-    this.getApprovalsDetail()
-    this.getApprovalsTaskDetail()
+    this.getApprovalsDetail();
+    this.getApprovalsTaskDetail();
   },
   methods: {
     async getApprovalsDetail() {
-      this.information = await getApprovalsDetail(this.approvalId)
-      this.information.data = JSON.parse(this.information.procData)
+      this.information = await getApprovalsDetail(this.approvalId);
+      this.information.data = JSON.parse(this.information.procData);
     },
     async getApprovalsTaskDetail() {
-      this.taskInstanceOutList = await getApprovalsTaskDetail(this.approvalId)
+      this.taskInstanceOutList = await getApprovalsTaskDetail(this.approvalId);
     },
     // 图片下载
     async getReviewHistory(id) {
-      const response = await downImg(id)
-      this.imgs = 'data:image/png;base64,' + btoa(
-        new Uint8Array(response.request.response).reduce((data, byte) => data + String.fromCharCode(byte), '')
-      )
-    }
-  }
-}
+      const response = await downImg(id);
+      this.imgs =
+        "data:image/png;base64," +
+        btoa(
+          new Uint8Array(response.request.response).reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            ""
+          )
+        );
+    },
+  },
+};
 </script>
-

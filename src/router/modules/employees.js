@@ -9,6 +9,7 @@ export default {
   // 配置二级路的路由表
   children: [
     {
+      name: "employees",
       // 不用写 这样代表即有Layout 还有员工管理
       path: "", // 这里当二级路由的path什么都不写的时候 表示该路由为当前二级路由的默认路由
       component: () => import("@/views/employees"),

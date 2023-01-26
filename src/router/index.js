@@ -83,7 +83,7 @@ export const constantRoutes = [
     children: [
       {
         path: "dashboard",
-        name: "Dashboard",
+        name: "dashboard",
         component: () => import("@/views/dashboard/index"),
         meta: { title: "首页", icon: "dashboard" },
       },
@@ -97,7 +97,9 @@ export const constantRoutes = [
 
 const createRouter = () =>
   new Router({
-    // mode: 'history', // require service support
+    // 路由模式改成历史模式 默认哈希模式
+    mode: "history", // require service support
+    base: "/hr/", //配置项目基地址
     // 管理滚动行为 如果出现滚动 切换就让页面回到顶部
     scrollBehavior: () => ({ y: 0 }),
     // 路由规则 临时合并所有的路由

@@ -44,7 +44,7 @@
 <script>
 import { getUserDetailByIdAPI } from "@/api/user";
 import { updateUser } from "@/api/approvals";
-import { updatePersonal, getPersonalDetail } from "@/api/employees";
+import { updatePersonalAPI, getPersonalDetail } from "@/api/employees";
 import { mapGetters } from "vuex";
 export default {
   name: "UsersTableIndex",

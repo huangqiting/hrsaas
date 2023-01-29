@@ -15,7 +15,7 @@ const name = defaultSettings.title || "vue Admin Template"; // page title
 // port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 9528; // dev port
 let cdn = { css: [], js: [] };
-const isProd = process.env.NODE_ENV === "production"; // 判断是否是生存环境
+const isProd = process.env.NODE_ENV === "production"; // 判断是否是生产环境
 let externals = {};
 if (isProd) {
   // 如果是生产环境 就排除打包 否则不排除
@@ -68,8 +68,8 @@ module.exports = {
     // 配置反向代理
     proxy: {
       "/api": {
-        target: "http://ihrm.itheima.net", // 跨域请求地址 不用写api
-        // target: "http://ihrm-java.itheima.net/",
+        // target: "http://ihrm.itheima.net", // 跨域请求地址 不用写api
+        target: "http://ihrm-java.itheima.net/",
         changOrigin: true, //  是否跨域
         // 路径重写
         // pathRewrite: {

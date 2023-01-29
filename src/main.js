@@ -16,15 +16,11 @@ import "@/permission"; // permission control
 // 把导出的全放directives对象里面
 import * as directives from "@/directives"; // 自定义指令
 // Object.keys()返回一个数组 把对象转为数组 数组的值为对象的key
-Object.keys(directives).forEach((key) => {
-  // 遍历这个数组统一注册自定义指令
-  Vue.directive(key, directives[key]);
-});
+// 遍历这个数组统一注册自定义指令
+Object.keys(directives).forEach((key) => Vue.directive(key, directives[key]));
 // 注册所有的过滤器
 import * as filters from "@/filters";
-Object.keys(filters).forEach((key) => {
-  Vue.filter(key, filters[key]);
-});
+Object.keys(filters).forEach((key) => Vue.filter(key, filters[key]));
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

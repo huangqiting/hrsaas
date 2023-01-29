@@ -73,6 +73,8 @@
                 @current-change="changePage"
                 layout="prev, pager, next"
                 :total="pageInfo.total"
+                :page-size="pageInfo.pagesize"
+                :current-page.sync="pageInfo.page"
               >
               </el-pagination>
             </el-row>
@@ -202,7 +204,7 @@ export default {
       // 放置页面及相关数据
       pageInfo: {
         page: 1,
-        pagesize: 10,
+        pagesize: 5,
         // 记录总数
         total: 0,
       },
@@ -289,7 +291,7 @@ export default {
     // 切换页数 newPage是当前点击的页面
     changePage(newPage) {
       // 把最新页数重新赋值 调用接口
-      this.pageInfo.page = newPage;
+      // this.pageInfo.page = newPage;
       this.getRoleList();
     },
     // 根据id获取公司信息
@@ -304,6 +306,11 @@ export default {
       await deleteRoleAPI(id);
       // 提示用户
       this.$message.success("删除成功");
+      // 删除是当前页最后一条角色时 应该把页码-1
+      // 否则将会出现空白
+      if (this.list.length === 1 && this.pageInfo.page !== 1) {
+        this.pageInfo.page--;
+      }
       this.getRoleList();
     },
     // 根据id获取角色详情

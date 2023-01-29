@@ -92,9 +92,10 @@ export default {
   filters: {
     // 对data.day时间进行处理 默认格式是yyyy-MM-dd 只需要天数
     getDay(value) {
+      // split返回数组 [2000,02,01]
       const day = value.split("-")[2];
       // startsWith() 判断字符串开头是不是
-      // substr() 保留字符串多少到多少
+      // substr() 保留字符串多少到多少 从0开始
       // 去掉天数前面的0
       return day.startsWith("0") ? day.substr(1) : day;
     },

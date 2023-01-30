@@ -34,6 +34,8 @@
 // xlsx@0.16.8记得安装低版本 否则会报错
 import XLSX from "xlsx";
 export default {
+  name: "UploadExcel",
+
   props: {
     beforeUpload: Function, // eslint-disable-line
     onSuccess: Function, // eslint-disable-line

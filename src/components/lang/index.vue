@@ -18,6 +18,7 @@
 <script>
 import Cookie from "js-cookie";
 export default {
+  name: "lang",
   methods: {
     // 点击获取该项
     changeLanguage(lang) {

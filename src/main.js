@@ -4,7 +4,7 @@ import "normalize.css/normalize.css"; // A modern alternative to CSS resets
 
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-import Component from "@/components";
+import "@/components"; // 全局注册组件
 import "@/styles/index.scss"; // global css
 import App from "./App";
 import store from "./store";
@@ -41,7 +41,7 @@ Vue.use(ElementUI, {
   i18n: (key, value) => i18n.t(key, value),
 });
 // 全局注册组件
-Vue.use(Component);
+// Vue.use(Component);
 // 注册一个全局的权限按钮混入
 Vue.mixin(checkPermission);
 Vue.config.productionTip = false;

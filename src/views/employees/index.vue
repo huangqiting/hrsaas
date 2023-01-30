@@ -16,11 +16,8 @@
           <el-button type="danger" size="small" @click="exportData"
             >Excel导出</el-button
           >
-          <el-button
-            type="primary"
-            size="small"
-            @click="showDialog = true"
-            :disabled="!checkPermission('POINT-USER-ADD')"
+          <!-- :disabled="!checkPermission('POINT-USER-ADD')" -->
+          <el-button type="primary" size="small" @click="showDialog = true"
             >新增员工</el-button
           >
         </template>
@@ -57,13 +54,19 @@
           align="center"
           prop="workNumber"
         />
+        <!-- formatter用来格式化内容 -->
+        <!--  :formatter="formatEmployment" -->
         <el-table-column
           align="center"
-          :formatter="formatEmployment"
           label="聘用形式"
           sortable=""
           prop="formOfEmployment"
-        />
+        >
+          <!-- 把1 2 转成 正式和非正式 其他则是未知 -->
+          <template v-slot="{ row }">
+            {{ formatEmployment(row) }}
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
           label="部门"
@@ -216,7 +219,7 @@ export default {
       // cellValue就是当前列的数据
       // 筛选出枚举 与枚举id相同的那个对象
       const obj = EmployeeEnum.hireType.find(
-        (item) => item.id === row.formOfEmployment
+        (item) => item.id === Number(row.formOfEmployment)
       );
       return obj ? obj.value : "未知";
     },
@@ -292,7 +295,7 @@ export default {
           } else if (headers[key] === "formOfEmployment") {
             // 把聘用形式的数字 用枚举 转换成正式和非正式
             const obj = EmployeeEnum.hireType.find(
-              (item2) => item2.id === item[headers[key]]
+              (item2) => item2.id === Number(item[headers[key]])
             );
             return obj ? obj.value : "未知";
           }

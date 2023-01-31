@@ -31,7 +31,8 @@
 </template>
 
 <script>
-// xlsx@0.16.8记得安装低版本 否则会报错
+// xlsx@0.16.8记得安装低版本 18以下的版本 否则会报错
+// 最新版本也可以使用import * as XLSX from "xlsx"
 import XLSX from "xlsx";
 export default {
   name: "UploadExcel",

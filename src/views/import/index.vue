@@ -43,6 +43,21 @@ export default {
         });
         return userInfo;
       });
+
+      //用正则处理
+      // const newArr2 = JSON.parse(
+      //   JSON.stringify(results).replace(
+      //     /(手机号|姓名|入职日期|转正日期|工号)/g,
+      //     function (value) {
+      //       // console.log(arguments);
+      //       // console.log(value);
+      //       // value就是找到的中文名字
+      //       return userRelations[value];
+      //     }
+      //   )
+      // );
+      // console.log(newArr2);
+
       // 调接口 存导入的员工
       await importEmployeeAPI(newArr);
       this.$message.success("导入成功");

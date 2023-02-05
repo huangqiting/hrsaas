@@ -43,7 +43,7 @@ export default {
       fileList: [],
       // 控制弹层显示
       showDialog: false,
-      // 保存点击图片的地址’
+      // 保存点击图片的地址
       imgUrl: "",
       // 保存最后上传文件的uid
       currentFileUid: "",
@@ -112,7 +112,7 @@ export default {
             // 上传到腾讯云的进度信息
             onProgress: (progressData) => {
               // progressData.percent 进度是0 -1 我们需要0-100 所以*100
-              this.percent = parseFloat(progressData.percent * 100);
+              this.percent = (progressData.percent * 100).toFixed(2);
               // 把进度条显示
               this.showPercent = false;
             },

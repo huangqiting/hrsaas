@@ -164,7 +164,7 @@ export default {
       list: [], // 保存员工列表
       pageInfo: {
         page: 1, // 当前页数
-        size: 10, // 当前显示多少条
+        size: 3, // 当前显示多少条
         total: 0, // 总条数
       },
       showDialog: false, // 控制添加员工弹层
@@ -190,6 +190,7 @@ export default {
       if (url) {
         // 数据更新了 页面渲染是异步的所以 拿不到ref
         this.showCodeDialog = true;
+        console.log(url);
         // nextTick可以在页面渲染完毕之后执行
         this.$nextTick(() => {
           // 此时可以拿到ref
@@ -229,8 +230,12 @@ export default {
         await this.$confirm("您确定要删除该员工吗");
         await delEmployeeAPI(id);
         this.$message.success("删除成功");
+        // 当删除每页的最后一条数据 页码-1 再新获取员工列表
+        if (this.list.length === 1 && this.page.page !== 1) {
+          this.pageInfo.page--;
+        }
         // 删除后重新获取员工列表
-        this.getEmployeeList();
+        await this.getEmployeeList();
       } catch (error) {
         console.log(error);
       }

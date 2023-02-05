@@ -164,7 +164,7 @@ export default {
       list: [], // 保存员工列表
       pageInfo: {
         page: 1, // 当前页数
-        size: 3, // 当前显示多少条
+        size: 10, // 当前显示多少条
         total: 0, // 总条数
       },
       showDialog: false, // 控制添加员工弹层
@@ -231,7 +231,7 @@ export default {
         await delEmployeeAPI(id);
         this.$message.success("删除成功");
         // 当删除每页的最后一条数据 页码-1 再新获取员工列表
-        if (this.list.length === 1 && this.page.page !== 1) {
+        if (this.list.length === 1 && this.pageInfo.page !== 1) {
           this.pageInfo.page--;
         }
         // 删除后重新获取员工列表

@@ -19,12 +19,17 @@ const actions = {
   // asyncRoutes 是所有的动态路由
   filterRoutes(ctx, menus) {
     // 保存用户有权限的路由数组
-    const routes = [];
+    let routes = [];
     // 筛选出用户拥有权限的路由
-    menus.forEach((key) => {
-      // 每遍历一次就会返回一个数组 所以要解构添加到routes合并
-      routes.push(...asyncRoutes.filter((item) => item.name === key));
-    });
+    // menus.forEach((key) => {
+    //   // 每遍历一次就会返回一个数组 所以要解构添加到routes合并
+    //   routes.push(...asyncRoutes.filter((item) => item.name === key));
+    // });
+
+    // 写法2
+    // 遍历所有的动态路由 includes查看用户是否拥有动态路由
+    routes = asyncRoutes.filter(item => menus.includes(item.name) )
+
     // 把用户有访问权限的路由和静态路由合并
     ctx.commit("setRoutes", routes);
     // state数据 是用来 显示左侧菜单用的
